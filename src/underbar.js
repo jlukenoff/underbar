@@ -375,7 +375,38 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-		//create array copy
+		//create random number string
+		let random = Math.random().toString().split('');
+		//filter out duplicates and numbers greater than array length
+		let newOrder = _.uniq(_.filter(random, function(num) {
+			
+			if (num.search(/\d/) !== 0 || Number(num) > array.length - 1) {
+				return false;
+			} else {
+				return true;
+			}
+		}));
+
+		//iterate over the input array and assign each input array value to a new Array index
+		let shuffledArr = new Array(array.length);
+		for (let i = 0; i < array.length; i++) {
+			shuffledArr[newOrder[i]] = array[i];
+		}
+		
+		return shuffledArr;
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+/*		//create array copy
 		let arrCopy = array.slice();
 		//create a random number
 		let random = String(Math.random() * 10 ** array.length);
@@ -384,7 +415,7 @@
 			//check if number in random number string is greater or less than 5...
 			Number(random[i]) > 5 ? arrCopy.unshift(arrCopy.pop()) : arrCopy.push(arrCopy.shift());
 		}
-		return arrCopy;
+		return arrCopy;*/
 	}
 		
 	
