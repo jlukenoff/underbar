@@ -213,8 +213,20 @@
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
+
+		if (!Array.isArray(collection)) {
+
+			let keys = Object.keys(collection);
+			
+			return _.reduce(keys, function(wasFound, item) {
+				if (wasFound) {
+					return true;
+				}
+      	return collection[item] === target;
+    	}, false);
+		}
+		return _.reduce(collection, function(wasFound, item) {
+			if (wasFound) {
         return true;
       }
       return item === target;
@@ -225,12 +237,26 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+		return _.reduce(collection, function(acc, val) {
+			if (!acc) {
+				return false;
+			}
+			return iterator ? Boolean(iterator(val)) : val;
+		}, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+		if (collection.length === 0) return false;
+		iterator = iterator || Boolean;
+		return _.reduce(collection, function(passed, val) {
+			if (iterator(val) || passed) {
+				return true;
+			}
+			return Boolean(iterator(val));
+		}, false);
   };
 
 
@@ -253,11 +279,25 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+		for (let i = 1; i < arguments.length; i++) {
+			for (let key in arguments[i]) {
+				obj[key] = arguments[i][key];
+			}
+		}
+		return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+		for (let i = 1; i < arguments.length; i++) {
+			for (let key in arguments[i]) {
+				if (obj[key] === undefined) {
+					obj[key] = arguments[i][key];
+				}
+			}
+		}
+		return obj;
   };
 
 
@@ -301,6 +341,17 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+		let storageContainer = {};
+		
+		return function() {
+			let key = Array.prototype.slice.call(arguments).join(', ');
+			if (storageContainer[key] === undefined) {
+				storageContainer[key] = func.apply(this, arguments);
+				return func.apply(this, arguments);
+			} else {
+				return storageContainer[key];
+			}
+		}
   };
 
   // Delays a function for the given number of milliseconds, and then calls
