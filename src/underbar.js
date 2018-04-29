@@ -342,15 +342,11 @@
   // instead if possible.
   _.memoize = function(func) {
 		let storageContainer = {};
-		
 		return function() {
-			let key = Array.prototype.slice.call(arguments).join(', ');
-			if (storageContainer[key] === undefined) {
-				storageContainer[key] = func.apply(this, arguments);
-				return func.apply(this, arguments);
-			} else {
-				return storageContainer[key];
+			if (storageContainer[JSON.stringify(arguments)] === undefined) {
+				storageContainer[JSON.stringify(arguments)] = func.apply(this, arguments);
 			}
+			return storageContainer[JSON.stringify(arguments)];
 		}
   };
 
@@ -361,6 +357,10 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+		let args = Array.prototype.slice.call(arguments);
+		return setTimeout(function() {
+			return func.apply(this, args.slice(2));
+		}, wait);
   };
 
 
@@ -375,7 +375,19 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-  };
+		//create array copy
+		let arrCopy = array.slice();
+		//create a random number
+		let random = String(Math.random() * 10 ** array.length);
+		//iterate over the array...
+		for (let i = 0; i < array.length; i++) {
+			//check if number in random number string is greater or less than 5...
+			Number(random[i]) > 5 ? arrCopy.unshift(arrCopy.pop()) : arrCopy.push(arrCopy.shift());
+		}
+		return arrCopy;
+	}
+		
+	
 
 
   /**
