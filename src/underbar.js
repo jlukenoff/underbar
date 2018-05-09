@@ -379,18 +379,24 @@
 		let random = Math.random().toString().split('');
 		//filter out duplicates and numbers greater than array length
 		let newOrder = _.uniq(_.filter(random, function(num) {
-			
-			if (num.search(/\d/) !== 0 || Number(num) > array.length - 1) {
+			if (num === '.' || num === ' ') {
+				return false;
+			} else if (Number(num) > array.length - 1) {
 				return false;
 			} else {
 				return true;
 			}
 		}));
-
+		
+		
+		
+		console.log('newOrder: ' + newOrder + '\nArray : ' + array + '\n-----------');
 		//iterate over the input array and assign each input array value to a new Array index
 		let shuffledArr = new Array(array.length);
 		for (let i = 0; i < array.length; i++) {
-			shuffledArr[newOrder[i]] = array[i];
+			let newIndex = parseInt(newOrder[i]);
+			
+			shuffledArr[newIndex] = array[i];
 		}
 		
 		return shuffledArr;
