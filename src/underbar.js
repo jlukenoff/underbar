@@ -388,9 +388,6 @@
 			}
 		}));
 		
-		
-		
-		console.log('newOrder: ' + newOrder + '\nArray : ' + array + '\n-----------');
 		//iterate over the input array and assign each input array value to a new Array index
 		let shuffledArr = new Array(array.length);
 		for (let i = 0; i < array.length; i++) {
