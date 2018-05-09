@@ -394,37 +394,18 @@
 		//iterate over the input array and assign each input array value to a new Array index
 		let shuffledArr = new Array(array.length);
 		for (let i = 0; i < array.length; i++) {
-			let newIndex = parseInt(newOrder[i]);
-			
+			let newIndex = parseInt(newOrder[i]) || i;	
 			shuffledArr[newIndex] = array[i];
 		}
-		
+    for (let i = 0; i < array.length; i++) {
+      if (_.indexOf(shuffledArr, array[i]) < 0) {
+        shuffledArr.push(array[i]);
+      }
+    }
+    
 		return shuffledArr;
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-/*		//create array copy
-		let arrCopy = array.slice();
-		//create a random number
-		let random = String(Math.random() * 10 ** array.length);
-		//iterate over the array...
-		for (let i = 0; i < array.length; i++) {
-			//check if number in random number string is greater or less than 5...
-			Number(random[i]) > 5 ? arrCopy.unshift(arrCopy.pop()) : arrCopy.push(arrCopy.shift());
-		}
-		return arrCopy;*/
 	}
-		
-	
+
 
 
   /**
